@@ -15,24 +15,27 @@ class SideRail extends React.Component {
   }
 
   confirmDelete(id) {
-    console.log('confirm delete');
     this.props.deletePlan(id);
+    this.props.updatePlans();
   }
 
+
+  
+
   saveName(name, id) {
-    this.props.editPlanName(name, id)
+    this.props.editPlanName(name, id);
     this.setState({
       editValue: ''
-    })
-    this.props.updatePlans()
+    });
+    this.props.updatePlans();
   }
 
   onEdit(e) {
-    this.setState({ editValue: e.target.value})
+    this.setState({ editValue: e.target.value });
   }
 
   shouldComponentUpdate(nextProp, nextState) {
-    return true
+    return true;
   }
 
   launchPlaidLink() {
@@ -48,16 +51,26 @@ class SideRail extends React.Component {
     return (
       <div className="card side-rail">
         <div className="card-block">
-          <img className="card-img-top" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRKkYg7YWw9mG3zsEI5lCHeTz30oLSjMXXxm5irxjnGTj5deUKOPA" />
+          <img
+            className="card-img-top"
+            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRKkYg7YWw9mG3zsEI5lCHeTz30oLSjMXXxm5irxjnGTj5deUKOPA"
+          />
           <div className="card-body border-bottom">
-            <h5 className="card-title">Welcome {this.props.userData && this.props.userData.fullname}</h5>
-            <button id="link-btn" className="btn theme-btn" onClick={this.props.launchPlaidLink}>Link Account</button>
-            <br /></div>
-          <div className="card-body border-bottom theme-hover cursorPointer" onClick={this.props.setOverview}>
-            <i className="fa fa-home fa-fw" aria-hidden="true"></i><a  >&nbsp;Home</a>
+            <h5 className="card-title">
+              Welcome {this.props.userData && this.props.userData.fullname}
+            </h5>
+            <button id="link-btn" className="btn theme-btn" onClick={this.props.launchPlaidLink}>
+              Link Account
+            </button>
+            <br />
+          </div>
+          <div className="card-body border-bottom theme-hover" onClick={this.props.setOverview}>
+            <i className="fa fa-home fa-fw" aria-hidden="true" />
+            <a>&nbsp;Home</a>
           </div>
           <div className="card-body border-bottom">
-            <i className="fa fa-list-alt " aria-hidden="true"></i><a >&nbsp; Plans </a>
+            <i className="fa fa-list-alt " aria-hidden="true" />
+            <a>&nbsp; Plans </a>
           </div>
           {/* After receiving the props, map them to the rail including all handlers */}
           {this.props.plans && this.props.plans.map((plan, idx) => (
@@ -70,33 +83,73 @@ class SideRail extends React.Component {
                   </h6>
                   {/* Ellipsis that allows you to open the modals for edit/delete plans */}
 
-                  {/* VERY IMPORTANT: Edit/delete works upon the active plan which is selected by clicking on the plan name.
+                    {/* VERY IMPORTANT: Edit/delete works upon the active plan which is selected by clicking on the plan name.
                   You are able to select the dropdown for a plan that isn't the active one, but the action will be performed
                   on the active plan. */}
 
-                  <span className="dropdown align-right">
-                    <a className="dropdown-toggle float-right" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                      <i className="fa fa-ellipsis-v " aria-hidden="true"></i>
-                    </a>
+                    <span className="dropdown align-right">
+                      <a
+                        className="dropdown-toggle float-right"
+                        href="#"
+                        role="button"
+                        id="dropdownMenuLink"
+                        data-toggle="dropdown"
+                        aria-haspopup="true"
+                        aria-expanded="false"
+                      >
+                        <i className="fa fa-ellipsis-v " aria-hidden="true" />
+                      </a>
 
-                    <div className="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                      <a className="dropdown-item" data-toggle="modal" data-target="#editModal" aria-label="Edit name" href="#">Edit name</a>
-                      <a className="dropdown-item" data-toggle="modal" data-target="#deleteModal" aria-label="Delete" href="#">Delete plan</a>
-                    </div>
-                  </span>
-
-                </div>
-                <div className="panel-body collapse" id={`collapseExample${idx}`} >
-                  <div>Created: {plan['created_at'].slice(0, 10)}</div>
-                  <div>Current savings: ${plan.currentSavings.toLocaleString()}</div>
-                  <div>Monthly savings: ${plan.monthlySavings.toLocaleString()}</div>
-                  <div>Retire by {plan.retirementAge}</div>
-                  <br></br>
+                      <div className="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                        <a
+                          className="dropdown-item"
+                          data-toggle="modal"
+                          data-target="#editModal"
+                          aria-label="Edit name"
+                          href="#"
+                        >
+                          Edit name
+                        </a>
+                        <a
+                          className="dropdown-item"
+                          href="#"
+                          onClick={() => {
+                            this.props.calculateRetirePlan(true);
+                          }}
+                        >
+                          Apply Goals
+                        </a>
+                        <a
+                          className="dropdown-item"
+                          href="#"
+                          onClick={() => {
+                            this.props.calculateRetirePlan(false);
+                          }}
+                        >
+                          Remove Goals
+                        </a>
+                        <a
+                          className="dropdown-item"
+                          data-toggle="modal"
+                          data-target="#deleteModal"
+                          aria-label="Delete"
+                          href="#"
+                        >
+                          Delete plan
+                        </a>
+                      </div>
+                    </span>
+                  </div>
+                  <div className="panel-body collapse" id={`collapseExample${idx}`}>
+                    <div>Created: {plan['created_at'].slice(0, 10)}</div>
+                    <div>Current savings: ${plan.currentSavings.toLocaleString()}</div>
+                    <div>Monthly savings: ${plan.monthlySavings.toLocaleString()}</div>
+                    <div>Retire by {plan.retirementAge}</div>
+                    <br />
+                  </div>
                 </div>
               </div>
-            </div>
-          )
-          )}
+            ))}
           {/* End map */}
           {this.props.plans.length > 1 ? (
             <div className="card-body theme-hover border-bottom cursorPointer" onClick={this.props.setCompare}>
@@ -147,7 +200,6 @@ class SideRail extends React.Component {
       </div>
     );
   }
-
 }
 
 export default SideRail;
