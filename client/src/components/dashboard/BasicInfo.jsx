@@ -120,8 +120,8 @@ class BasicInfo extends React.Component {
       ),
       (
         <div className="tab tab6 form-group">
-          Last question, how much of your estimated monthly takehome of ${monthlyTakehome} do you save? <br/>
-          The recommended savings is 10%-14%, which would be around ${monthlyTakehome * .12}.
+          Last question, how much of your estimated monthly takehome of ${Number(monthlyTakehome).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')} do you save? <br/>
+          The recommended savings is 10%-14%, which would be around ${Number(monthlyTakehome * .12).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}.
           <div className="slidecontainer">
             <input type="range" min="1" max={monthlyTakehome} value={this.state.monthlySavings} className="form-control-range" id="saveSpendSlider" onChange={(event)=>{this.setState({monthlySavings: event.target.value, monthlySpending: monthlyTakehome - event.target.value})}}/>
             <br/>
@@ -146,12 +146,12 @@ class BasicInfo extends React.Component {
             <div style={{"overflow":"auto"}}>
               <div id="form-buttons">
               {/* This is the button render control for the form */}
-                {this.state.currentSlide !== 0 && <button type="button" id="prevBtn" className="btn btn-secondary" onClick={this.previousSlide}>Previous</button>}
+                {this.state.currentSlide !== 0 && <div className="basicInfoButton"><button type="button" id="prevBtn" className="btn btn-secondary" onClick={this.previousSlide}>Previous</button></div>}
                 {/* Show a "previous" button if the user has answered at least one question and gone on to the next slide */}
 
-                {this.state.currentSlide !== slideOptions.length - 1 && <button type="button" id="nextBtn" className="btn btn-light" onClick={this.nextSlide}>Next</button>}
+                {this.state.currentSlide !== slideOptions.length - 1 && <div className="basicInfoButton"><button type="button" id="nextBtn" className="btn btn-light" onClick={this.nextSlide}>Next</button></div>}
 
-                {this.state.currentSlide === slideOptions.length - 1 && <button type="button" id="nextBtn" className="btn btn-success" onClick={this.submitInfo}>Submit</button>}
+                {this.state.currentSlide === slideOptions.length - 1 && <div className="basicInfoButton"><button type="button" id="nextBtn" className="btn btn-success" onClick={this.submitInfo}>Submit</button></div>}
                 {/* If the user is on the final slide, allow them to submit */}
               </div>
             </div>

@@ -29,7 +29,6 @@ class App extends React.Component {
   } 
 
   componentDidMount() {
-    // debugger;
     this.getUserInfo();
   }
 
@@ -56,7 +55,6 @@ class App extends React.Component {
   }
 
   getUserInfo() {
-    debugger;
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
         firebase.auth().currentUser.getIdToken(true)

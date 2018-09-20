@@ -5,17 +5,18 @@ class SideRail extends React.Component {
     super(props);
     this.state = {
       editValue: '',
+      selectedPlanId: ''
     }
     this.confirmDelete = this.confirmDelete.bind(this)
     this.saveName = this.saveName.bind(this)
     this.onEdit = this.onEdit.bind(this)
     this.launchPlaidLink = this.launchPlaidLink.bind(this);
+    this.setPlan = this.setPlan.bind(this);
   }
 
-
   confirmDelete(id) {
-    this.props.deletePlan(id)
-    this.props.updatePlans()
+    console.log('confirm delete');
+    this.props.deletePlan(id);
   }
 
   saveName(name, id) {
@@ -38,6 +39,11 @@ class SideRail extends React.Component {
     this.handler.open();
   }
 
+  setPlan(plan){
+    this.props.setActivePlan(plan);
+    this.setState({ selectedPlanId: plan.planId})
+  }
+
   render() {
     return (
       <div className="card side-rail">
@@ -47,7 +53,7 @@ class SideRail extends React.Component {
             <h5 className="card-title">Welcome {this.props.userData && this.props.userData.fullname}</h5>
             <button id="link-btn" className="btn theme-btn" onClick={this.props.launchPlaidLink}>Link Account</button>
             <br /></div>
-          <div className="card-body border-bottom theme-hover" onClick={this.props.setOverview}>
+          <div className="card-body border-bottom theme-hover cursorPointer" onClick={this.props.setOverview}>
             <i className="fa fa-home fa-fw" aria-hidden="true"></i><a  >&nbsp;Home</a>
           </div>
           <div className="card-body border-bottom">
@@ -55,12 +61,12 @@ class SideRail extends React.Component {
           </div>
           {/* After receiving the props, map them to the rail including all handlers */}
           {this.props.plans && this.props.plans.map((plan, idx) => (
-            <div key={idx} className="card-body border-bottom py-1">
+            <div key={plan.planId} className="card-body border-bottom py-1">
               <div className="panel-default">
                 <div className="panel-heading">
-                  <h6 className="panel-title theme-hover" data-toggle="collapse" onClick={() => this.props.setActivePlan(plan)} data-target={`#collapseExample${idx}`} aria-expanded="false" aria-controls="collapseExample">
+                  <h6 className="panel-title theme-hover cursorPointer" data-toggle="collapse" onClick={() => this.setPlan(plan)} data-target={`#collapseExample${idx}`} aria-expanded="false" aria-controls="collapseExample">
                     <i className="fa fa-caret-down" aria-hidden="true"></i>
-                    &nbsp; {plan.name || 'Plan'}
+                    {this.state.selectedPlanId === plan.planId ? (<React.Fragment>&nbsp;<u>{plan.name || 'Plan'}</u></React.Fragment>) : (<React.Fragment>&nbsp;{plan.name || 'Plan'}</React.Fragment>)}                    
                   </h6>
                   {/* Ellipsis that allows you to open the modals for edit/delete plans */}
 
@@ -87,12 +93,15 @@ class SideRail extends React.Component {
                   <div>Retire by {plan.retirementAge}</div>
                   <br></br>
                 </div>
-               
               </div>
             </div>
           )
           )}
           {/* End map */}
+          {this.props.plans.length > 1 ? (
+            <div className="card-body theme-hover border-bottom cursorPointer" onClick={this.props.setCompare}>
+              <i className="fa fa-search " aria-hidden="true"></i><a >&nbsp; Compare Plans </a>
+            </div>) : ''}
           <div className="modal fade" id="editModal" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                   <div className="modal-dialog" role="document">
                     <div className="modal-content">
@@ -112,7 +121,7 @@ class SideRail extends React.Component {
                     </div>
                   </div>
                 </div>
-                <div className="modal fade" id="deleteModal" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div className="modal fade" id="deleteModal" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                   <div className="modal-dialog" role="document">
                     <div className="modal-content">
                       <div className="modal-header">
@@ -131,8 +140,8 @@ class SideRail extends React.Component {
                     </div>
                   </div>
                 </div>
-          <div className="card-body border-bottom theme-hover" onClick={this.props.createPlan}>
-          <a ><i className="fa fa-plus-square" aria-hidden="true"></i>&nbsp; Add new plan </a>
+          <div className="card-body border-bottom theme-hover">
+            <a className="cursorPointer" onClick={this.props.createPlan}><i className="fa fa-plus-square" aria-hidden="true"></i>&nbsp; Add new plan </a>
           </div>
         </div>
       </div>

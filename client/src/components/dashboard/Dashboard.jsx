@@ -6,6 +6,7 @@ import Overview from './Overview.jsx';
 import GoalInfo from './goalInfo.jsx';
 import BasicInfo from './BasicInfo.jsx';
 import LineChart from '../charts/LineChart.jsx';
+import ComparePlans from './ComparePlans.jsx';
 
 class Dashboard extends React.Component {
   constructor(props) {
@@ -28,6 +29,7 @@ class Dashboard extends React.Component {
       },
       formToggle: false,
       accountToggle: true,
+      compareToggle: false,
       retirePlan: {}
     };
     this.createPlan = this.createPlan.bind(this);
@@ -42,22 +44,35 @@ class Dashboard extends React.Component {
     this.editPlanName = this.editPlanName.bind(this);
     this.submitBasic = this.submitBasic.bind(this);
     this.calculateRetirePlan = this.calculateRetirePlan.bind(this);
+    this.setCompare = this.setCompare.bind(this);
   }
 
   createPlan() {
     this.setState({
       formToggle: true,
       overviewToggle: false,
-      accountToggle: false
+      accountToggle: false,
+      compareToggle : false
     });
   }
 
+  setCompare(){
+    this.setState({
+      formToggle: false,
+      overviewToggle: false,
+      accountToggle: false,
+      compareToggle: true
+    })
+  }
+
   deletePlan(id) {
+    console.log('delete plan');
     axios
       .delete('/retire/plans', {
         params: { planId: id }
       })
       .then((res) => {
+        console.log(res)
         this.updatePlans();
       })
       .catch((err) => {
@@ -81,7 +96,8 @@ class Dashboard extends React.Component {
     this.setState({
       activePlan: plan,
       overviewToggle: true,
-      formToggle: false
+      formToggle: false,
+      compareToggle : false
     });
     this.calculateRetirePlan();
   }
@@ -165,7 +181,8 @@ class Dashboard extends React.Component {
     //toggle on the overview and disable form view
     this.setState({
       overviewToggle: true,
-      formToggle: false
+      formToggle: false,
+      compareToggle : false
     });
   }
 
@@ -263,7 +280,7 @@ class Dashboard extends React.Component {
           <SideRail
             updatePlans={this.updatePlans}
             activePlan={this.state.activePlan}
-            user={this.props.user}
+            userData={this.props.userData}
             currentUserId={this.props.userData && this.props.userData.userId}
             plans={this.state.plans}
             createPlan={this.createPlan}
@@ -273,9 +290,15 @@ class Dashboard extends React.Component {
             setOverview={this.setOverview}
             goals={this.state.goals}
             launchPlaidLink={this.launchPlaidLink}
+            setCompare={this.setCompare}
           />
         </div>
         <div className="col-md-10">
+          {this.state.compareToggle && (
+            <div className="col-md-12">
+              <ComparePlans plans={this.state.plans}></ComparePlans>
+            </div>
+          )}
           {/* render forms when toggle is true. atm this only happens if user has no plans or if they click add plan */}
           {this.state.formToggle && (
             <div className="col-md-12">

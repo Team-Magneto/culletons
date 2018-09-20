@@ -54,7 +54,7 @@
 
 /* Mark the steps that are finished and valid: */
 .step.finish {
-  background-color: #547a99;
+  background-color: #547999;
 }
 
 #basic-info-form {
@@ -78,7 +78,7 @@
 }
 
 .side-rail {
-  height: 90vh;
+  /* height: 90vh; */
   /* background-color: lightgreen; */
 }
 
@@ -154,9 +154,9 @@ p, h6 {
   color: #547a99
 }
 
-.fa:hover {
+/* .fa:hover {
   font-size: 22px
-}
+} */
 
 .footer-dk {
   background: #547a99;
@@ -253,9 +253,6 @@ a {
   overflow: scroll;
 }
 
-.loginbtn {
-  cursor: pointer;
-}
 
 .loginOptions{
   padding: 5px;
@@ -263,4 +260,13 @@ a {
 
 .loginButton{
   width: 40px;
+}
+
+.basicInfoButton {
+  padding-left:10px;
+  float:left;
+}
+
+.cursorPointer {
+  cursor: pointer;
 }

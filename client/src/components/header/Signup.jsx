@@ -25,7 +25,6 @@ class Signup extends React.Component {
   //create user
   createUser(idToken, fullname, email, username){
     if(!username) username = email;
-    debugger;
     return axios.post('/retire/users', { idToken, fullname, email, username });
   }
 
