@@ -115,7 +115,7 @@ class Login extends React.Component {
       <div className="wrapper">
         {/* Creates button for Login */}
         <div className="container">
-          <a className="loginbtn" id="auth-btn" data-toggle="modal" data-target="#elegantModalForm" >Log In</a>
+          <a className="cursorPointer" id="auth-btn" data-toggle="modal" data-target="#elegantModalForm" >Log In</a>
         </div>
         {/* MODAL: Creates popup for Login */}
         <div className="modal fade" ref={modal => this.modal = modal} id="elegantModalForm" data-keyboard="false" data-backdrop="static" tabIndex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

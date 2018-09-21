@@ -90,17 +90,17 @@ class LineChart extends React.Component {
             </div>
             <div>
               <div>Retire by: {this.props.activePlan.retirementAge}</div>
-              <div>Starting Annual income: ${this.props.activePlan.annualIncome}</div>
+              <div>Starting Annual income: ${(this.props.activePlan.annualIncome).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</div>
               <div>Savings Rate: {this.props.retirePlan.savingsRate}%</div>
-              <div>Retirement Goal: ${this.props.retirePlan.savingsAtRetirement}</div>
-              <div>Retirement budget: ${this.props.retirePlan.spendingAtRetirement}</div>
+              <div>Retirement Goal: ${Number(this.props.retirePlan.savingsAtRetirement).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</div>
+              <div>Retirement budget: ${Number(this.props.retirePlan.spendingAtRetirement).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</div>
             </div>
             <br/>
             <div id="explaination">
-              From your current savings of <b>${this.props.activePlan.currentSavings}</b> at the age of <b>{this.props.activePlan.currentAge}</b>,
-              this plan projects a salary growth to <b>${this.props.retirePlan.salaryAtRetirement}</b> while maintaining a savings rate of <b>{this.props.retirePlan.savingsRate}%</b>.
-              This results in a total estimated savings by the age of <b>{this.props.activePlan.retirementAge}</b> to be <b>${this.props.retirePlan.savingsAtRetirement}</b>.
-              Estimated annual spending will be <b>${this.props.retirePlan.spendingAtRetirement}</b> based on projections
+              From your current savings of <b>${(this.props.activePlan.currentSavings).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</b> at the age of <b>{this.props.activePlan.currentAge}</b>,
+              this plan projects a salary growth to <b>${Number(this.props.retirePlan.salaryAtRetirement).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</b> while maintaining a savings rate of <b>{this.props.retirePlan.savingsRate}%</b>.
+              This results in a total estimated savings by the age of <b>{this.props.activePlan.retirementAge}</b> to be <b>${Number(this.props.retirePlan.savingsAtRetirement).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</b>.
+              Estimated annual spending will be <b>${Number(this.props.retirePlan.spendingAtRetirement).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}</b> based on projections
             </div>
           </div>
           <div className="col-md-9">

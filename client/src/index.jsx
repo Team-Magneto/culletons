@@ -38,7 +38,6 @@ class App extends React.Component {
           userData: data
         },
         () => {
-          console.log(this.state.userData);
         }
       );
     });
