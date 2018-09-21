@@ -53,14 +53,7 @@ class BasicInfo extends React.Component {
 
   render() {
     // Create the text which will be displayed to the user dynamically based on inputs while answering questions
-    let retireDescriptions = [
-      'Planning on pinching pennies',
-      'Going to take it easy',
-      'Would like to be comfortable',
-      'Want to live well',
-      'Plan on balling out'
-    ];
-    let retireDesire = retireDescriptions[this.state.retireGoal - 1];
+    let retireDesire = this.props.retireDescriptions[this.state.retireGoal - 1];
     let retireCountdown =
       this.state.currentAge !== 0 && this.state.currentAge !== ''
         ? 'Great! Lets see how to get you ready to retire in ' +

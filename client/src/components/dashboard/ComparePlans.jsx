@@ -1,6 +1,6 @@
 import React from "react";
 import PlanItem from "./PlanItem.jsx";
-import _ from "lodash";
+import chunk from "lodash/chunk";
 
 class ComparePlans extends React.Component {
   constructor(props) {
@@ -54,16 +54,28 @@ class ComparePlans extends React.Component {
               <div className="row">
                 <div className="card-body col">Add Plan to Compare</div>
               </div>
-              {/* {_.chunk(this.props.plans, 4).map((row, i) => (
+              {
+                chunk(this.props.plans, 3).map((planRow, i) => (
                 <div className="row">
                 {
-                  row.map((col) => (
-                    <div className="col">{ col }</div>
+                  planRow.map((plan) => (
+                    <div className="card-body col-4">
+                      <div className="card">
+                        <div className="row">
+                          <div className="card-body col">
+                          <h5 className="card-title">Retirement Age : {plan.retirementAge}</h5>
+                          <p className="card-text">Goal : {this.props.retireDescriptions[plan.retireGoal-1]}</p>
+                          <p className="card-text">current Age : {plan.currentAge}</p>
+                          <div><a href="#" className="btn btn-primary">Compare</a></div>
+                        </div>
+                        </div>
+                      </div>
+                    </div>
                   ))
                 }
                 </div>
                 ))
-              } */}
+              }
               <div className="row">
                 <div className="card-body col">
                   <button

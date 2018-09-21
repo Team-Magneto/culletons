@@ -30,7 +30,14 @@ class Dashboard extends React.Component {
       formToggle: false,
       accountToggle: true,
       compareToggle: false,
-      retirePlan: {}
+      retirePlan: {},
+      retireDescriptions : [
+        'Planning on pinching pennies',
+        'Going to take it easy',
+        'Would like to be comfortable',
+        'Want to live well',
+        'Plan on balling out'
+      ]
     };
     this.createPlan = this.createPlan.bind(this);
     this.updatePlans = this.updatePlans.bind(this);
@@ -312,14 +319,14 @@ class Dashboard extends React.Component {
         <div className="col-md-10">
           {this.state.compareToggle && (
             <div className="col-md-12">
-              <ComparePlans plans={this.state.plans}></ComparePlans>
+              <ComparePlans plans={this.state.plans} retireDescriptions={this.state.retireDescriptions}></ComparePlans>
             </div>
           )}
           {/* render forms when toggle is true. atm this only happens if user has no plans or if they click add plan */}
           {this.state.formToggle && (
             <div className="col-md-12">
               {/* two different forms for the user to fill out */}
-              <BasicInfo submitBasic={this.submitBasic} user={this.props.userData} />
+              <BasicInfo submitBasic={this.submitBasic} user={this.props.userData} retireDescriptions={this.state.retireDescriptions} />
               {this.state.goals ? (
                 this.state.goals.length === 0 ? (
                   <GoalInfo user={this.props.userData} />
