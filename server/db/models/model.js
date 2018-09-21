@@ -134,6 +134,25 @@ var getPlansFromDB = (userIdToSearch) => {
     });
 };
 
+//accepts an array of objects to seed the database for balance and savings amounts in order to render the savings history chart
+var seedSavingsHistory = (seed) => {
+  seed.forEach((entry) => {
+    return new SavingsHistory({
+      userId: 7,
+      balanceAmt: entry.balance,
+      availableAmt: entry.savings,
+      date: entry.date
+    })
+    .save()
+    .then(function(newSave) {
+      console.log(newSave, ' was created in the database model.');
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+  });
+};
+
 // Creates a new plan for the user
 var createPlanInDB = (
   name,
@@ -277,6 +296,7 @@ var createGoalInDB = (userId, familySize, numberOfKids, travel, hobbySpending, l
   });
 };
 
+
 // creates a record of the user's savings total, for a given day.
 var addSavingHistory = (userId, savingsAmt, availableAmt) => {
   let today = moment().format('l');
@@ -328,6 +348,17 @@ var addSavingHistory = (userId, savingsAmt, availableAmt) => {
   });
 };
 
+//fetches the savings history for a user in order to render it in a chart
+var getSavingsHistory = () => {
+  return new SavingsHistory()
+  .query({ where: { userId : '7' }})
+  .fetchAll()
+  .then((data) => {
+    return data;
+  })
+};
+
+
 module.exports = {
   User,
   Users,
@@ -342,5 +373,7 @@ module.exports = {
   getGoalsFromDB,
   createGoalInDB,
   getItemByID,
-  addSavingHistory
+  addSavingHistory,
+  seedSavingsHistory,
+  getSavingsHistory
 };

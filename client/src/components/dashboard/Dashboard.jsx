@@ -7,6 +7,7 @@ import GoalInfo from './goalInfo.jsx';
 import BasicInfo from './BasicInfo.jsx';
 import LineChart from '../charts/LineChart.jsx';
 import ComparePlans from './ComparePlans.jsx';
+import SavingsHistChart from '../charts/SavingsHistChart.jsx';
 
 class Dashboard extends React.Component {
   constructor(props) {
@@ -142,6 +143,7 @@ class Dashboard extends React.Component {
     axios
       .get('/retire/plans', { params: { userId: this.props.userData.userId } })
       .then(({ data }) => {
+        console.log('this is the plan data: ', data);
         this.setState({
           plans: data,
           // default the active plan as the first one. could later allow users to manually set their "main" plan

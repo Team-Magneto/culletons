@@ -47,14 +47,14 @@ module.exports = {
     model
       .getItemByID(req.query.itemId)
       .then((item) => {
-        // console.log("this is returned from getItem ", item)
+        //console.log("this is returned from getItem ", item)
         client.getAuth(item.attributes.itemToken, (error, numbersData) => {
           if (error != null) {
             var msg = 'Unable to pull accounts from Plaid API.';
             console.log(msg + '\n' + error);
             return res.json({ error: msg });
           }
-          // console.log(numbersData);
+          //console.log(numbersData);
           res.send(numbersData);
         });
       })
@@ -76,5 +76,40 @@ module.exports = {
         console.log(err);
         res.sendStatus(500);
       });
+  },
+
+  //seeds savings history database with fake entries sent in post body
+  seedHistory: (req, res) => {
+    model
+      .seedSavingsHistory(req.body.seed)
+      .then(() => {
+        res.sendStatus(201);
+      })
+      .catch((err) => {
+        console.log(err);
+        res.sendStatus(500);
+      })
+  },
+
+
+  //gets the balance and savings history from the past 30 days and formats it for highcharts
+  getHistory: (req, res) => {
+    model
+    .getSavingsHistory()
+    .then(({models}) => {
+      console.log('this is the savings hist data ', models[0].attributes);
+      let body = { balance : [], savings : [] };
+      models.forEach(({attributes})=> {
+        let balancePoint = [attributes.date, attributes.balanceAmt];
+        body.balance.push(balancePoint);
+        let savingsPoint = [attributes.date, attributes.availableAmt];
+        body.savings.push(savingsPoint);
+      })
+      res.send(body);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.sendStatus(500);
+    })
   }
 };
