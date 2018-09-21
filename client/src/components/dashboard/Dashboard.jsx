@@ -73,13 +73,11 @@ class Dashboard extends React.Component {
   }
 
   deletePlan(id) {
-    console.log('delete plan');
     axios
       .delete('/retire/plans', {
         params: { planId: id }
       })
       .then((res) => {
-        console.log(res)
         this.updatePlans();
       })
       .catch((err) => {
@@ -118,7 +116,6 @@ class Dashboard extends React.Component {
       .catch((err) => {
         console.log(err);
       });
-    console.log('Trying to submit');
   }
 
   updateItems() {
@@ -176,7 +173,6 @@ class Dashboard extends React.Component {
       .get('retire/goals', { params: { userId: this.props.userData.userId } })
       .then(({ data }) => {
         this.setState({ goals: data }, () => {
-          console.log(this.state.goals);
         });
         if (this.state.goals) {
           this.setState({ formGoalsToggle: false });
@@ -248,14 +244,11 @@ class Dashboard extends React.Component {
         params: { activePlan: this.state.activePlan, goals: goals }
       })
       .then((result) => {
-        console.log(result.data);
-        console.log(this.state.goals);
         this.setState(
           {
             retirePlan: result.data
           },
           () => {
-            console.log(this.state.retirePlan);
           }
         );
       })
@@ -279,7 +272,6 @@ class Dashboard extends React.Component {
             userId: this.props.userData.userId
           })
           .then(() => {
-            console.log('Post Successful');
             this.updateItems();
           })
           .catch((err) => {

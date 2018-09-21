@@ -46,7 +46,6 @@ class Signup extends React.Component {
               authData.additionalUserInfo.username
             )
               .then(({ data }) => {
-                console.log(data);
                 if (data == 'USER ALREADY EXISTS IN DB') {
                   this.setState({
                     dupUser: true

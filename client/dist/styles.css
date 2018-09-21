@@ -272,9 +272,14 @@ a {
 }
 
 .compareCards{
-  border: 1px solid rgba(0,0,0,.125);
-  border-radius: .25rem;
-  margin-left: 40px;
-  padding: 0;
-  margin-top: 10px;
+  width: 18rem;
+}
+
+.selected {
+  border-width: 2px;
+  border-color: black;
+}
+
+.goal {
+  height : calc(2.875rem + 3px);
 }
