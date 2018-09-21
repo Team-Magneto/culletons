@@ -34,7 +34,7 @@ class Nav extends React.Component {
               <p className="nav-item">{this.props.userData && "Welcome " +this.props.userData.fullname}</p>
             </div>
             {!this.props.isLoggedIn && <Login updateUserState={this.props.updateUserState} />}
-            {this.props.isLoggedIn && <div className="nav-item"><a className="loginbtn mb-4" id="auth-btn" onClick={this.clickHandler}>Logout</a></div>}
+            {this.props.isLoggedIn && <div className="nav-item"><a className="cursorPointer mb-4" id="auth-btn" onClick={this.clickHandler}>Logout</a></div>}
             </div>
         </nav>
       </div>

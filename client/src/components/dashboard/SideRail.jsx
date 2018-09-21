@@ -4,18 +4,23 @@ class SideRail extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      editValue: ''
-    };
-    this.confirmDelete = this.confirmDelete.bind(this);
-    this.saveName = this.saveName.bind(this);
-    this.onEdit = this.onEdit.bind(this);
+      editValue: '',
+      selectedPlanId: ''
+    }
+    this.confirmDelete = this.confirmDelete.bind(this)
+    this.saveName = this.saveName.bind(this)
+    this.onEdit = this.onEdit.bind(this)
     this.launchPlaidLink = this.launchPlaidLink.bind(this);
+    this.setPlan = this.setPlan.bind(this);
   }
 
   confirmDelete(id) {
     this.props.deletePlan(id);
     this.props.updatePlans();
   }
+
+
+  
 
   saveName(name, id) {
     this.props.editPlanName(name, id);
@@ -35,6 +40,11 @@ class SideRail extends React.Component {
 
   launchPlaidLink() {
     this.handler.open();
+  }
+
+  setPlan(plan){
+    this.props.setActivePlan(plan);
+    this.setState({ selectedPlanId: plan.planId})
   }
 
   render() {
@@ -63,23 +73,15 @@ class SideRail extends React.Component {
             <a>&nbsp; Plans </a>
           </div>
           {/* After receiving the props, map them to the rail including all handlers */}
-          {this.props.plans &&
-            this.props.plans.map((plan, idx) => (
-              <div key={idx} className="card-body border-bottom py-1">
-                <div className="panel-default">
-                  <div className="panel-heading">
-                    <h6
-                      className="panel-title theme-hover"
-                      data-toggle="collapse"
-                      onClick={() => this.props.setActivePlan(plan)}
-                      data-target={`#collapseExample${idx}`}
-                      aria-expanded="false"
-                      aria-controls="collapseExample"
-                    >
-                      <i className="fa fa-caret-down" aria-hidden="true" />
-                      &nbsp; {plan.name || 'Plan'}
-                    </h6>
-                    {/* Ellipsis that allows you to open the modals for edit/delete plans */}
+          {this.props.plans && this.props.plans.map((plan, idx) => (
+            <div key={plan.planId} className="card-body border-bottom py-1">
+              <div className="panel-default">
+                <div className="panel-heading">
+                  <h6 className="panel-title theme-hover cursorPointer" data-toggle="collapse" onClick={() => this.setPlan(plan)} data-target={`#collapseExample${idx}`} aria-expanded="false" aria-controls="collapseExample">
+                    <i className="fa fa-caret-down" aria-hidden="true"></i>
+                    {this.state.selectedPlanId === plan.planId ? (<React.Fragment>&nbsp;<u>{plan.name || 'Plan'}</u></React.Fragment>) : (<React.Fragment>&nbsp;{plan.name || 'Plan'}</React.Fragment>)}                    
+                  </h6>
+                  {/* Ellipsis that allows you to open the modals for edit/delete plans */}
 
                     {/* VERY IMPORTANT: Edit/delete works upon the active plan which is selected by clicking on the plan name.
                   You are able to select the dropdown for a plan that isn't the active one, but the action will be performed
@@ -149,85 +151,50 @@ class SideRail extends React.Component {
               </div>
             ))}
           {/* End map */}
-          <div
-            className="modal fade"
-            id="editModal"
-            tabIndex="-1"
-            role="dialog"
-            aria-labelledby="exampleModalLabel"
-            aria-hidden="true"
-          >
-            <div className="modal-dialog" role="document">
-              <div className="modal-content">
-                <div className="modal-header">
-                  <h5 className="modal-title" id="exampleModalLabel">
-                    Edit plan name
-                  </h5>
-                  <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
+          {this.props.plans.length > 1 ? (
+            <div className="card-body theme-hover border-bottom cursorPointer" onClick={this.props.setCompare}>
+              <i className="fa fa-search " aria-hidden="true"></i><a >&nbsp; Compare Plans </a>
+            </div>) : ''}
+          <div className="modal fade" id="editModal" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                  <div className="modal-dialog" role="document">
+                    <div className="modal-content">
+                      <div className="modal-header">
+                        <h5 className="modal-title" id="exampleModalLabel">Edit plan name</h5>
+                        <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div className="modal-body">
+                        Rename your plan: <input value={this.state.editValue} onChange={this.onEdit}></input>
+                      </div>
+                      <div className="modal-footer">
+                        <button type="button" className="btn btn-secondary" data-dismiss="modal">Discard</button>
+                        <button type="button" data-dismiss="modal" onClick={() => this.saveName(this.state.editValue, this.props.activePlan.planId)} className="btn btn-success">Save</button>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <div className="modal-body">
-                  Rename your plan: <input value={this.state.editValue} onChange={this.onEdit} />
+          <div className="modal fade" id="deleteModal" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                  <div className="modal-dialog" role="document">
+                    <div className="modal-content">
+                      <div className="modal-header">
+                        <h5 className="modal-title" id="exampleModalLabel">Are you sure?</h5>
+                        <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div className="modal-body">
+                        Please confirm that you wish to delete this plan.
+                      </div>
+                      <div className="modal-footer">
+                        <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" data-dismiss="modal" onClick={() => this.confirmDelete(this.props.activePlan.planId)} className="btn btn-danger">Delete</button>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <div className="modal-footer">
-                  <button type="button" className="btn btn-secondary" data-dismiss="modal">
-                    Discard
-                  </button>
-                  <button
-                    type="button"
-                    data-dismiss="modal"
-                    onClick={() =>
-                      this.saveName(this.state.editValue, this.props.activePlan.planId)
-                    }
-                    className="btn btn-success"
-                  >
-                    Save
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div
-            className="modal fade"
-            id="deleteModal"
-            tabIndex="-1"
-            role="dialog"
-            aria-labelledby="exampleModalLabel"
-            aria-hidden="true"
-          >
-            <div className="modal-dialog" role="document">
-              <div className="modal-content">
-                <div className="modal-header">
-                  <h5 className="modal-title" id="exampleModalLabel">
-                    Are you sure?
-                  </h5>
-                  <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                </div>
-                <div className="modal-body">Please confirm that you wish to delete this plan.</div>
-                <div className="modal-footer">
-                  <button type="button" className="btn btn-secondary" data-dismiss="modal">
-                    Close
-                  </button>
-                  <button
-                    type="button"
-                    data-dismiss="modal"
-                    onClick={() => this.confirmDelete(this.props.activePlan.planId)}
-                    className="btn btn-danger"
-                  >
-                    Delete
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="card-body border-bottom theme-hover" onClick={this.props.createPlan}>
-            <a>
-              <i className="fa fa-plus-square" aria-hidden="true" />
-              &nbsp; Add new plan{' '}
-            </a>
+          <div className="card-body border-bottom theme-hover">
+            <a className="cursorPointer" onClick={this.props.createPlan}><i className="fa fa-plus-square" aria-hidden="true"></i>&nbsp; Add new plan </a>
           </div>
         </div>
       </div>

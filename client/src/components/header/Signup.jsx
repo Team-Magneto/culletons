@@ -23,8 +23,8 @@ class Signup extends React.Component {
   }
 
   //create user
-  createUser(idToken, fullname, email, username) {
-    if (!username) username = email;
+  createUser(idToken, fullname, email, username){
+    if(!username) username = email;
     return axios.post('/retire/users', { idToken, fullname, email, username });
   }
 
@@ -46,7 +46,6 @@ class Signup extends React.Component {
               authData.additionalUserInfo.username
             )
               .then(({ data }) => {
-                console.log(data);
                 if (data == 'USER ALREADY EXISTS IN DB') {
                   this.setState({
                     dupUser: true

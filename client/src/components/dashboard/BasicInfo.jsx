@@ -53,14 +53,7 @@ class BasicInfo extends React.Component {
 
   render() {
     // Create the text which will be displayed to the user dynamically based on inputs while answering questions
-    let retireDescriptions = [
-      'Planning on pinching pennies',
-      'Going to take it easy',
-      'Would like to be comfortable',
-      'Want to live well',
-      'Plan on balling out'
-    ];
-    let retireDesire = retireDescriptions[this.state.retireGoal - 1];
+    let retireDesire = this.props.retireDescriptions[this.state.retireGoal - 1];
     let retireCountdown =
       this.state.currentAge !== 0 && this.state.currentAge !== ''
         ? 'Great! Lets see how to get you ready to retire in ' +
@@ -163,9 +156,9 @@ class BasicInfo extends React.Component {
         </p>
       </div>,
       <div className="tab tab6 form-group">
-        Last question, how much of your estimated monthly takehome of ${monthlyTakehome} do you
+        Last question, how much of your estimated monthly takehome of ${Number(monthlyTakehome).toFixed(2).replace(/\d(?=(\d{3})+\.)/g)} do you
         save? <br />
-        The recommended savings is 10%-14%, which would be around ${monthlyTakehome * 0.12}.
+        The recommended savings is 10%-14%, which would be around ${Number(monthlyTakehome * 0.12).toFixed(2).replace(/\d(?=(\d{3})+\.)/g)}.
         <div className="slidecontainer">
           <input
             type="range"
@@ -181,8 +174,8 @@ class BasicInfo extends React.Component {
               });
             }}
           />
-          <br />${this.state.monthlySavings} OR{' '}
-          {Math.floor(100 * (this.state.monthlySavings / monthlyTakehome))}%
+          <br />${Number(this.state.monthlySavings).toFixed(2).replace(/\d(?=(\d{3})+\.)/g)} OR{' '}
+          {Math.floor(100 * (this.state.monthlySavings / monthlyTakehome)).toFixed(2).replace(/\d(?=(\d{3})+\.)/g)}%
         </div>
       </div>
     ];
@@ -203,7 +196,7 @@ class BasicInfo extends React.Component {
                     <div id="form-buttons">
                       {/* This is the button render control for the form */}
                       {this.state.currentSlide !== 0 && (
-                        <button
+                        <div className="basicInfoButton"><button
                           type="button"
                           id="prevBtn"
                           className="btn btn-secondary"
@@ -211,10 +204,12 @@ class BasicInfo extends React.Component {
                         >
                           Previous
                         </button>
+                        </div>
                       )}
                       {/* Show a "previous" button if the user has answered at least one question and gone on to the next slide */}
 
                       {this.state.currentSlide !== slideOptions.length - 1 && (
+                        <div className="basicInfoButton">
                         <button
                           type="button"
                           id="nextBtn"
@@ -223,9 +218,11 @@ class BasicInfo extends React.Component {
                         >
                           Next
                         </button>
+                        </div>
                       )}
 
                       {this.state.currentSlide === slideOptions.length - 1 && (
+                        <div className="basicInfoButton">
                         <button
                           type="button"
                           id="nextBtn"
@@ -234,6 +231,7 @@ class BasicInfo extends React.Component {
                         >
                           Submit
                         </button>
+                        </div>
                       )}
                       {/* If the user is on the final slide, allow them to submit */}
                     </div>

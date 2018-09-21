@@ -6,6 +6,7 @@ import Overview from './Overview.jsx';
 import GoalInfo from './goalInfo.jsx';
 import BasicInfo from './BasicInfo.jsx';
 import LineChart from '../charts/LineChart.jsx';
+import ComparePlans from './ComparePlans.jsx';
 import SavingsHistChart from '../charts/SavingsHistChart.jsx';
 
 class Dashboard extends React.Component {
@@ -29,7 +30,15 @@ class Dashboard extends React.Component {
       },
       formToggle: false,
       accountToggle: true,
-      retirePlan: {}
+      compareToggle: false,
+      retirePlan: {},
+      retireDescriptions : [
+        'Planning on pinching pennies',
+        'Going to take it easy',
+        'Would like to be comfortable',
+        'Want to live well',
+        'Plan on balling out'
+      ]
     };
     this.createPlan = this.createPlan.bind(this);
     this.updatePlans = this.updatePlans.bind(this);
@@ -43,14 +52,25 @@ class Dashboard extends React.Component {
     this.editPlanName = this.editPlanName.bind(this);
     this.submitBasic = this.submitBasic.bind(this);
     this.calculateRetirePlan = this.calculateRetirePlan.bind(this);
+    this.setCompare = this.setCompare.bind(this);
   }
 
   createPlan() {
     this.setState({
       formToggle: true,
       overviewToggle: false,
-      accountToggle: false
+      accountToggle: false,
+      compareToggle : false
     });
+  }
+
+  setCompare(){
+    this.setState({
+      formToggle: false,
+      overviewToggle: false,
+      accountToggle: false,
+      compareToggle: true
+    })
   }
 
   deletePlan(id) {
@@ -82,7 +102,8 @@ class Dashboard extends React.Component {
     this.setState({
       activePlan: plan,
       overviewToggle: true,
-      formToggle: false
+      formToggle: false,
+      compareToggle : false
     });
     this.calculateRetirePlan();
   }
@@ -96,7 +117,6 @@ class Dashboard extends React.Component {
       .catch((err) => {
         console.log(err);
       });
-    console.log('Trying to submit');
   }
 
   updateItems() {
@@ -155,7 +175,6 @@ class Dashboard extends React.Component {
       .get('retire/goals', { params: { userId: this.props.userData.userId } })
       .then(({ data }) => {
         this.setState({ goals: data }, () => {
-          console.log(this.state.goals);
         });
         if (this.state.goals) {
           this.setState({ formGoalsToggle: false });
@@ -170,7 +189,8 @@ class Dashboard extends React.Component {
     //toggle on the overview and disable form view
     this.setState({
       overviewToggle: true,
-      formToggle: false
+      formToggle: false,
+      compareToggle : false
     });
   }
 
@@ -226,14 +246,11 @@ class Dashboard extends React.Component {
         params: { activePlan: this.state.activePlan, goals: goals }
       })
       .then((result) => {
-        console.log(result.data);
-        console.log(this.state.goals);
         this.setState(
           {
             retirePlan: result.data
           },
           () => {
-            console.log(this.state.retirePlan);
           }
         );
       })
@@ -257,7 +274,6 @@ class Dashboard extends React.Component {
             userId: this.props.userData.userId
           })
           .then(() => {
-            console.log('Post Successful');
             this.updateItems();
           })
           .catch((err) => {
@@ -280,7 +296,7 @@ class Dashboard extends React.Component {
           <SideRail
             updatePlans={this.updatePlans}
             activePlan={this.state.activePlan}
-            user={this.props.user}
+            userData={this.props.userData}
             currentUserId={this.props.userData && this.props.userData.userId}
             plans={this.state.plans}
             createPlan={this.createPlan}
@@ -290,15 +306,21 @@ class Dashboard extends React.Component {
             setOverview={this.setOverview}
             goals={this.state.goals}
             launchPlaidLink={this.launchPlaidLink}
+            setCompare={this.setCompare}
             calculateRetirePlan={this.calculateRetirePlan}
           />
         </div>
         <div className="col-md-10">
+          {this.state.compareToggle && (
+            <div className="col-md-12">
+              <ComparePlans plans={this.state.plans} retireDescriptions={this.state.retireDescriptions}></ComparePlans>
+            </div>
+          )}
           {/* render forms when toggle is true. atm this only happens if user has no plans or if they click add plan */}
           {this.state.formToggle && (
             <div className="col-md-12">
               {/* two different forms for the user to fill out */}
-              <BasicInfo submitBasic={this.submitBasic} user={this.props.userData} />
+              <BasicInfo submitBasic={this.submitBasic} user={this.props.userData} retireDescriptions={this.state.retireDescriptions} />
               {this.state.goals ? (
                 this.state.goals.length === 0 ? (
                   <GoalInfo user={this.props.userData} />
