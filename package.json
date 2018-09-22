@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "node server/index.js",
     "test": "mocha --bail --reporter nyan test/ServerSpec.js",
     "server": "nodemon --inspect server/index.js",
     "react": "webpack -d --watch"

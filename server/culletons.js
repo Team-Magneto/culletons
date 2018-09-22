@@ -13,5 +13,4 @@ const routes = require('./routes.js');
 app.use(bodyParser.json())
 app.use('/retire', routes);
 
-
 module.exports = app;
